@@ -1,5 +1,7 @@
 # JSON Viewer
 
+https://mankarsandesh.github.io/json-viewer/
+
 A fast, beautiful JSON viewer built with React + Vite. Designed for inspecting large JSON documents — collapsible tree, search, copy paths, theme toggle, and lazy rendering so the UI stays responsive on big files.
 
 ![Stack](https://img.shields.io/badge/stack-React%2018%20%2B%20Vite%205-black) ![License](https://img.shields.io/badge/license-MIT-black)
