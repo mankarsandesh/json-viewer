@@ -127,7 +127,7 @@ export default function App() {
           <span className="jv-header__pill">v1.0</span>
           <a
             className="jv-header__link"
-            href="https://github.com/"
+            href="https://github.com/mankarsandesh/json-viewer"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="View source on GitHub"
