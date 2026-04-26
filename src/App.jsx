@@ -121,7 +121,7 @@ export default function App() {
       <header className="jv-header">
         <a className="jv-header__brand" href="https://json-viewer-explorer.vercel.app/">
 
-          <span className="jv-header__mark">{'$$'}</span>
+          <span className="jv-header__mark">{'{ }'}</span>
           <span className="jv-header__name">
             <em>JSON</em> Viewer
           </span>
