@@ -128,6 +128,34 @@ export function getAncestorPaths(path) {
   return ancestors
 }
 
+// Safely get a value at a JSONPath-style string
+export function getValueAtPath(root, path) {
+  if (!path || path === '' || path === '$') return root
+  
+  const parts = []
+  const re = /(\.[A-Za-z_$][A-Za-z0-9_$]*)|(\[\d+\])|(\["(?:[^"\\]|\\.)*"\])|^([A-Za-z_$][A-Za-z0-9_$]*)/g
+  let m
+  while ((m = re.exec(path)) !== null) {
+    let p = m[0]
+    if (p.startsWith('.')) {
+      parts.push(p.slice(1))
+    } else if (p.startsWith('["')) {
+      parts.push(p.slice(2, -2).replace(/\\"/g, '"'))
+    } else if (p.startsWith('[')) {
+      parts.push(parseInt(p.slice(1, -1), 10))
+    } else {
+      parts.push(p)
+    }
+  }
+
+  let current = root
+  for (const part of parts) {
+    if (current === null || typeof current !== 'object') return undefined
+    current = current[part]
+  }
+  return current
+}
+
 // Sample JSON for the demo / empty state
 export const SAMPLE_JSON = {
   app: 'JSON Viewer',

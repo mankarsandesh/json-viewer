@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import InputPanel from './components/InputPanel'
 import JsonViewer from './components/JsonViewer'
+import ExplorerView from './components/ExplorerView'
 import Toolbar from './components/Toolbar'
 import Toast from './components/Toast'
 import { useTheme } from './hooks/useTheme'
@@ -17,6 +18,8 @@ export default function App() {
   const [collapseSignal, setCollapseSignal] = useState(0)
   const [toast, setToast] = useState('')
   const [hoverPath, setHoverPath] = useState('')
+  const [viewMode, setViewMode] = useState('tree') // 'tree' | 'explorer'
+  const [explorerPath, setExplorerPath] = useState('')
 
   const handleLoad = useCallback((parsed, raw) => {
     setData(parsed)
@@ -30,6 +33,7 @@ export default function App() {
     setRawSize(0)
     setQuery('')
     setMatchIndex(0)
+    setExplorerPath('')
   }, [])
 
   const stats = useMemo(() => {
@@ -133,48 +137,65 @@ export default function App() {
         </div>
       </header>
 
-      {data === null ? (
-        <main className="jv-stage">
-          <InputPanel onLoad={handleLoad} />
-        </main>
+      {data !== null ? (
+        <Toolbar
+          query={query}
+          onQueryChange={setQuery}
+          matchCount={matches.length}
+          matchIndex={matchIndex}
+          onPrevMatch={onPrevMatch}
+          onNextMatch={onNextMatch}
+          onExpandAll={() => setExpandSignal((s) => s + 1)}
+          onCollapseAll={() => setCollapseSignal((s) => s + 1)}
+          onCopyAll={onCopyAll}
+          onDownload={onDownload}
+          onClear={handleClear}
+          stats={stats}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          onResetPath={() => setExplorerPath('')}
+        />
       ) : (
-        <>
-          <Toolbar
+        <div className="jv-toolbar-placeholder" />
+      )}
+
+      <main className={`jv-stage ${data === null ? '' : (viewMode === 'tree' ? 'jv-stage--tree' : 'jv-stage--explorer')}`} onMouseMove={(e) => {
+        const el = e.target.closest?.('[data-path]')
+        if (el) setHoverPath(el.dataset.path || '')
+      }}>
+        {data === null ? (
+          <InputPanel onLoad={handleLoad} />
+        ) : viewMode === 'tree' ? (
+          <JsonViewer
+            data={data}
             query={query}
-            onQueryChange={setQuery}
-            matchCount={matches.length}
-            matchIndex={matchIndex}
-            onPrevMatch={onPrevMatch}
-            onNextMatch={onNextMatch}
-            onExpandAll={() => setExpandSignal((s) => s + 1)}
-            onCollapseAll={() => setCollapseSignal((s) => s + 1)}
-            onCopyAll={onCopyAll}
-            onDownload={onDownload}
-            onClear={handleClear}
-            stats={stats}
-            theme={theme}
-            onToggleTheme={toggleTheme}
+            matchPaths={focusedSet}
+            expandSignal={expandSignal}
+            collapseSignal={collapseSignal}
+            expandToPaths={expandToPaths}
+            onCopy={onCopyPath}
           />
-          <main className="jv-stage jv-stage--tree" onMouseMove={(e) => {
-            const el = e.target.closest?.('[data-path]')
-            if (el) setHoverPath(el.dataset.path || '')
-          }}>
-            <JsonViewer
-              data={data}
-              query={query}
-              matchPaths={focusedSet}
-              expandSignal={expandSignal}
-              collapseSignal={collapseSignal}
-              expandToPaths={expandToPaths}
-              onCopy={onCopyPath}
-            />
-          </main>
-          <footer className="jv-footer">
-            <span className="jv-footer__label">Path</span>
-            <code className="jv-footer__path">{focusedMatchPath || hoverPath || '$'}</code>
-            <span className="jv-footer__hint">⌘/Ctrl+F to search · Alt+Click toggle to recurse</span>
-          </footer>
-        </>
+        ) : (
+          <ExplorerView
+            data={data}
+            path={explorerPath}
+            onNavigate={setExplorerPath}
+            onCopy={onCopyPath}
+            query={query}
+          />
+        )}
+      </main>
+
+      {data !== null ? (
+        <footer className="jv-footer">
+          <span className="jv-footer__label">Path</span>
+          <code className="jv-footer__path">{focusedMatchPath || hoverPath || '$'}</code>
+          <span className="jv-footer__hint">⌘/Ctrl+F to search · Alt+Click toggle to recurse</span>
+        </footer>
+      ) : (
+        <div className="jv-footer-placeholder" />
       )}
 
       <Toast message={toast} onClose={() => setToast('')} />

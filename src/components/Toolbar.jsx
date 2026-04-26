@@ -15,6 +15,9 @@ export default function Toolbar({
   stats,
   theme,
   onToggleTheme,
+  viewMode,
+  onViewModeChange,
+  onResetPath,
 }) {
   const searchRef = useRef(null)
 
@@ -74,6 +77,11 @@ export default function Toolbar({
       </div>
 
       <div className="jv-toolbar__group">
+        {viewMode === 'explorer' && (
+          <button className="btn btn--sm btn--primary" onClick={onResetPath} title="Go to Root">
+            ⌂ Home
+          </button>
+        )}
         <button className="btn btn--sm" onClick={onExpandAll} title="Expand all">
           Expand
         </button>
@@ -92,21 +100,30 @@ export default function Toolbar({
       </div>
 
       <div className="jv-toolbar__group jv-toolbar__group--right">
+        <div className="jv-view-toggle">
+          <button
+            className={`btn btn--sm ${viewMode === 'tree' ? 'btn--active' : ''}`}
+            onClick={() => onViewModeChange('tree')}
+            title="Tree View"
+          >
+            Tree
+          </button>
+          <button
+            className={`btn btn--sm ${viewMode === 'explorer' ? 'btn--active' : ''}`}
+            onClick={() => onViewModeChange('explorer')}
+            title="Explorer View"
+          >
+            Explorer
+          </button>
+        </div>
+
         {stats && (
-          <div className="jv-stats">
+          <div className="jv-stats jv-stats--desktop">
             <span><b>{stats.keys.toLocaleString()}</b> keys</span>
             <span className="jv-stats__sep">·</span>
             <span><b>{stats.objects.toLocaleString()}</b> objects</span>
             <span className="jv-stats__sep">·</span>
             <span><b>{stats.arrays.toLocaleString()}</b> arrays</span>
-            <span className="jv-stats__sep">·</span>
-            <span>depth <b>{stats.maxDepth}</b></span>
-            {stats.size && (
-              <>
-                <span className="jv-stats__sep">·</span>
-                <span><b>{stats.size}</b></span>
-              </>
-            )}
           </div>
         )}
         <button className="btn btn--icon" onClick={onToggleTheme} title="Toggle theme" aria-label="Toggle theme">
