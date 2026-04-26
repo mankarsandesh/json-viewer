@@ -36,6 +36,7 @@
   align-items: baseline;
   gap: 10px;
   letter-spacing: -0.01em;
+  text-decoration: none;
 }
 
 .jv-header__mark {
