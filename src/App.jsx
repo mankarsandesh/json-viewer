@@ -195,9 +195,12 @@ export default function App() {
           <span className="jv-footer__label">Path</span>
           <code className="jv-footer__path">{focusedMatchPath || hoverPath || '$'}</code>
           <span className="jv-footer__hint">⌘/Ctrl+F to search · Alt+Click toggle to recurse</span>
+          <span className="jv-footer__credit">Made with <span className="jv-footer__heart">❤️</span> by Sandesh</span>
         </footer>
       ) : (
-        <div className="jv-footer-placeholder" />
+        <footer className="jv-footer">
+          <span className="jv-footer__credit" style={{ marginLeft: 'auto' }}>Made with <span className="jv-footer__heart">❤️</span> by Sandesh</span>
+        </footer>
       )}
 
       <Toast message={toast} onClose={() => setToast('')} />
