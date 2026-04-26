@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import InputPanel from './components/InputPanel'
 import JsonViewer from './components/JsonViewer'
 import ExplorerView from './components/ExplorerView'
@@ -116,10 +117,11 @@ export default function App() {
 
   return (
     <div className="jv-app">
+      <Analytics />
       <header className="jv-header">
         <a className="jv-header__brand" href="https://json-viewer-explorer.vercel.app/">
 
-          <span className="jv-header__mark">{'{ }'}</span>
+          <span className="jv-header__mark">{'$$'}</span>
           <span className="jv-header__name">
             <em>JSON</em> Viewer
           </span>
