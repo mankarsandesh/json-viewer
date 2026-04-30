@@ -123,7 +123,7 @@ export default function App() {
 
           <span className="jv-header__mark">{'{ }'}</span>
           <span className="jv-header__name">
-            <em>JSON</em> Viewer
+            <em>JSON</em> Tree Viewer
           </span>
 
         </a>

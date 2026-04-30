@@ -60,7 +60,7 @@ export default function InputPanel({ onLoad, onError }) {
     >
       <div className="jv-input__hero">
         <h1 className="jv-input__title">
-          <em>Inspect</em> JSON, beautifully.
+          Fast & Beautiful <em>JSON Tree Viewer</em>
         </h1>
         <p className="jv-input__subtitle">
           Paste, drop a file, or load the sample. Built for large documents — collapsible tree, search, lazy rendering.
